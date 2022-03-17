@@ -5,7 +5,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public abstract class SocketServerBase implements Server {
-  protected abstract void handleClient(Socket client) throws Exception;
+  protected abstract void handleSocket(Socket client) throws Exception;
 
   @Override
   public void start(int port) throws IOException {
@@ -15,9 +15,9 @@ public abstract class SocketServerBase implements Server {
       Socket client = server.accept();
 
       try {
-        handleClient(client);
+        handleSocket(client);
       } catch (Exception e) {
-        System.out.println("Failed to accept socket from " + client.getInetAddress().toString());
+        System.out.println("Failed to handle connection from " + client.getInetAddress().toString() + ". " + e.getMessage());
       }
     }
   }

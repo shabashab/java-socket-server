@@ -1,19 +1,14 @@
 package edu.ukma.tarasenko;
 
-import edu.ukma.tarasenko.server.HandlerSocketServer;
-import edu.ukma.tarasenko.server.Server;
+import edu.ukma.tarasenko.server.*;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 
 public class Main {
   private static final int PORT = 8000;
 
   private static Server createServer() {
-    return new HandlerSocketServer(socket -> {
-      socket.getOutputStream().write("Hello, world".getBytes(StandardCharsets.UTF_8));
-      socket.close();
-    });
+    return new SingleRequestHandlerServer((request, response) -> response.sendPlain(200, request.getPath() + "\nHello, Putin, suka!"), new RequestParserImpl(), new ResponseFactoryImpl());
   }
 
   public static void main(String[] args) throws IOException {

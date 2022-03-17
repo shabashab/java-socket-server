@@ -1,9 +1,6 @@
 package edu.ukma.tarasenko.server;
 
-import java.io.InputStream;
-import java.net.Socket;
-
-public class RequestHandlerServer extends SocketServerBase {
+public class RequestHandlerServer extends ClientHandlingServerBase {
   private final RequestHandlerProvider _handlerProvider;
   private final RequestParser _requestParser;
   private final ResponseFactory _responseFactory;
@@ -15,11 +12,9 @@ public class RequestHandlerServer extends SocketServerBase {
   }
 
   @Override
-  protected void handleClient(Socket client) throws Exception {
-    InputStream socketInputStream = client.getInputStream();
-
-    Request request = _requestParser.parseFromStream(socketInputStream);
-    Response response = _responseFactory.createForSocket(client);
+  protected void handleClient(Client client) throws Exception {
+    Request request = _requestParser.parseFromClient(client);
+    Response response = _responseFactory.createForClient(client);
 
     RequestHandler handler = this._handlerProvider.provideForRequest(request);
     handler.handleRequest(request, response);
